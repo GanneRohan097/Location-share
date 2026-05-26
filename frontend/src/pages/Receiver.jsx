@@ -15,24 +15,47 @@ const Receiver = () => {
   const [data,setData] = useState({});
   const [receiverLocation, setReceiverLocation] = useState(null);
 
-  useEffect(()=>{
-     navigator.geolocation.getCurrentPosition(
+useEffect(()=>{
 
-    (position) => {
+   const interval = setInterval(()=>{
 
-      setReceiverLocation({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      });
+      navigator.geolocation.getCurrentPosition(
 
-    },
+         (position)=>{
 
-    (error) => {
-      console.log(error);
-    }
+            setReceiverLocation({
 
-  );
-  },[])
+               lat: position.coords.latitude,
+
+               lng: position.coords.longitude
+
+            });
+
+         },
+
+         (error)=>{
+
+            console.log(error.message);
+
+         },
+
+         {
+
+            enableHighAccuracy:true,
+
+            timeout:10000,
+
+            maximumAge:0
+
+         }
+
+      );
+
+   },3000);
+
+   return ()=>clearInterval(interval);
+
+},[]);
 
   async function handleRequest(enteredCode){
           setInterval(() => {
@@ -84,6 +107,7 @@ const Receiver = () => {
             }
         </GoogleMap>
       </LoadScript>
+      <p>{JSON.stringify(receiverLocation)}</p>
               </div>
       )}
       
