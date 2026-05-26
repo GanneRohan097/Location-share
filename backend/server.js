@@ -57,7 +57,7 @@ mongoose.connect(process.env.MONGO_URL)
     console.log("DB connected");
 })
 .catch((err)=>{
-    console.log("failed to connect db");
+    console.log(err);
 })
 app.listen(7000,()=>{
     console.log("Server running on port 7000");

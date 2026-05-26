@@ -39,7 +39,7 @@ const Sender = () => {
         localStorage.setItem("sharedData", JSON.stringify(newData));
         console.log("Stored locally");
         axios.post(
-          'http://localhost:7000/share',
+          'https://location-share-f1m3.onrender.com/share',
           {
             code: newData[0],
             longitude: newData[1],
@@ -75,7 +75,7 @@ const Sender = () => {
     setData(newData);
     localStorage.setItem("sharedData", JSON.stringify(newData));
     axios.post(
-      'http://localhost:7000/share',
+      'https://location-share-f1m3.onrender.com/share',
       {
         code: newData[0],
         longitude: longitude,
@@ -91,7 +91,7 @@ const Sender = () => {
   }
   async function handleDelete() {
     await axios.delete(
-      `http://localhost:7000/delete/${data[0]}`
+      `https://location-share-f1m3.onrender.com/delete/${data[0]}`
     );
     console.log("Deleted")
     setReveal(false);

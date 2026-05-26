@@ -41,7 +41,7 @@ const Receiver = () => {
   }
   async function fetchLocation(enteredCode) {
     const response = await axios.post(
-      'http://localhost:7000/receive',
+      'https://location-share-f1m3.onrender.com/receive',
       {
         code:enteredCode
       }
