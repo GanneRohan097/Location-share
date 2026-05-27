@@ -31,7 +31,7 @@ function App() {
 
       </div>
        <Routes>
-          <Route path='/' element={<Home/>}/>
+          <Route path='/' element={<Sender/>}/>
           <Route path='/sender' element={<Sender/>}/>
           <Route path='/receiver' element={<Receiver/>}/>
        </Routes>

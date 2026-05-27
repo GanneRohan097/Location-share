@@ -10,7 +10,7 @@ import {
   Shield,
   Copy,
   Send,
-  SquareX
+  SquareX,
 } from 'lucide-react';
 
 const Sender = () => {
@@ -132,7 +132,12 @@ const Sender = () => {
               zoom={18}
               mapTypeId="hybrid"
             >
-              <Marker position={center} label="S" draggable={true} onDragEnd={(e) => handleDraglocation(e.latLng.lng(), e.latLng.lat())} />
+              <Marker position={center} label="S" draggable={true} onDragEnd={(e) => handleDraglocation(e.latLng.lng(), e.latLng.lat())} 
+                icon={{
+                    url:'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+                    scaledSize: new window.google.maps.Size(50,50)
+                  }}
+              />
             </GoogleMap>
           }
         </LoadScript>
