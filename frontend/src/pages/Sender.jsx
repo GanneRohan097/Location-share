@@ -58,7 +58,7 @@ const Sender = () => {
   }
   async function handleReceiver() {
     const response = await axios.post(
-      'http://localhost:7000/sendReceiver', {
+      'https://location-share-f1m3.onrender.com/sendReceiver', {
       code: code
     }
     )

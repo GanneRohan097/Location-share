@@ -61,7 +61,7 @@ const Receiver = () => {
 
   async function sendData() {
     await axios.post(
-      'http://localhost:7000/receiverShare',{
+      'https://location-share-f1m3.onrender.com/receiverShare',{
         code: value,
         name: "Rohan",
         longitude: receiverLocation.lng,
