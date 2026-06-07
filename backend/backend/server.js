@@ -4,7 +4,6 @@ const app = express();
 require('dotenv').config();
 const mongoose = require('mongoose');
 const Location = require('./models/locationModel')
-const ReceiverData = require('./models/ReciverData');
 app.use(cors());
 app.use(express.json())
 
@@ -46,43 +45,6 @@ app.post('/receive',async (req,res)=>{
         }
 
 })
-
-app.post('/receiverShare', async(req,res)=>{
-    const {code , name , longitude , latitude} = req.body;
-    console.log("Body:",req.body);
-    let receiver = await ReceiverData.findOne({
-        code: code
-    })
-    if(receiver){
-        receiver.name=name;
-        receiver.longitude = longitude;
-        receiver.latitude = latitude;
-        await receiver.save();
-    }
-    else{
-        receiver = new ReceiverData({
-            code,
-            name,
-            longitude,
-            latitude
-        });
-         await receiver.save();
-    }
-     res.send("Receiver location saved");
-     console.log("Location saved");
-});
-
-app.post('/sendReceiver',async(req,res)=>{
-      const {code} = req.body;
-      const receiver = await ReceiverData.findOne({
-        code: code
-      });
-      if(receiver){
-        res.json(receiver);
-      }
-      console.log("Location received in sender page");
-})
-
 app.delete('/delete/:code',async (req,res)=>{
      const code = req.params.code;
      await Location.deleteOne({

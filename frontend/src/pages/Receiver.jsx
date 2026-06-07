@@ -59,15 +59,24 @@ const Receiver = () => {
 
   }, []);
 
+  async function sendData() {
+    await axios.post(
+      'http://localhost:7000/receiverShare',{
+        code: value,
+        name: "Rohan",
+        longitude: receiverLocation.lng,
+        latitude : receiverLocation.lat
+      }
+    )
+    
+  }
+
   async function handleRequest(enteredCode) {
-
-    fetchLocation(enteredCode);
-
     setInterval(() => {
 
       fetchLocation(enteredCode);
 
-    }, 3000);
+    }, 5000);
 
   }
 
@@ -83,6 +92,7 @@ const Receiver = () => {
     setData(response.data);
 
     setReveal(true);
+    return response.data;
 
   }
 
@@ -91,178 +101,169 @@ const Receiver = () => {
     lng: data.longitude || 78.4867
   };
 
-  return (
+return (
+  <div className="min-h-screen p-6">
+    <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-    <div className='min-h-screen bg-gray-100 p-3 grid grid-cols-1 md:grid-cols-2 gap-4'>
+      <div className="bg-white rounded-3xl shadow-2xl p-6">
 
-      <div className='bg-white rounded-2xl shadow-lg p-4'>
-
-        <div className='flex items-center gap-2'>
-
-          <Send
-            size={40}
-            color='white'
-            className='bg-blue-500 rounded-full p-2'
-          />
-
-          <div>
-
-            <h1 className='text-2xl font-bold text-blue-700'>
-              Receive Location
-            </h1>
-
-            <p className='text-sm text-gray-500'>
-              Enter the code shared by the sender
-            </p>
-
+        <div className="flex items-center gap-3 mb-6">
+          <div className="bg-blue-600 p-3 rounded-full">
+            <Send size={28} color="white" />
           </div>
 
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">
+              Receive Location
+            </h1>
+            <p className="text-gray-500">
+              Enter the sender code to track location
+            </p>
+          </div>
         </div>
 
-        <div className='flex items-center gap-2 mt-5'>
+        <div className="bg-slate-100 rounded-2xl p-4 mb-6">
+          <p className="text-gray-600 text-sm">
+            Enter the code shared by the sender and start live tracking.
+          </p>
+        </div>
+
+        <div className="flex flex-col md:flex-row gap-3">
 
           <input
-            className='border-2 border-gray-300 rounded-lg p-3 text-lg w-full outline-none focus:border-blue-500'
+            className="flex-1 border-2 border-gray-200 rounded-xl px-4 py-3 text-lg outline-none focus:border-blue-500 transition"
             onChange={(e) => setValue(e.target.value)}
-            type='number'
-            placeholder='Enter code here'
+            type="number"
+            placeholder="Enter sharing code"
           />
 
           <button
             onClick={() => handleRequest(value)}
-            className='flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-semibold transition'
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium transition flex items-center justify-center gap-2"
           >
-
-            <Search size={20} />
-
+            <Search size={18} />
             Find
+          </button>
 
+          <button
+            onClick={() => sendData()}
+            className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-medium transition"
+          >
+            Send My Data
           </button>
 
         </div>
 
-        {
+        {reveal && (
+          <div className="space-y-4 mt-6">
 
-          reveal && (
-
-            <div className='mt-5 space-y-3'>
-
-              <div className='bg-green-100 border border-green-300 rounded-xl p-4'>
-
-                <div className='flex items-center gap-2 text-green-700'>
-
-                  <CheckCircle2 size={22} />
-
-                  <p className='font-semibold'>
-                    Code matched successfully
-                  </p>
-
-                </div>
-
+            <div className="bg-green-100 border border-green-200 rounded-2xl p-4">
+              <div className="flex items-center gap-2 text-green-700">
+                <CheckCircle2 size={22} />
+                <p className="font-semibold">
+                  Connection Established Successfully
+                </p>
               </div>
-
-              <div className='bg-purple-100 border border-purple-300 rounded-xl p-4'>
-
-                <div className='flex items-center gap-2 mb-2'>
-
-                  <MapPin size={18} />
-
-                  <p className='font-semibold'>
-                    Sender Location
-                  </p>
-
-                </div>
-
-                <p className='text-sm font-medium'>
-                  Longitude: {data.longitude}
-                </p>
-
-                <p className='text-sm font-medium mt-1'>
-                  Latitude: {data.latitude}
-                </p>
-
-              </div>
-
-              <div className='bg-blue-100 border border-blue-300 rounded-xl p-4'>
-
-                <div className='flex items-center gap-2 mb-2'>
-
-                  <MapPin size={18} />
-
-                  <p className='font-semibold'>
-                    Receiver Location
-                  </p>
-
-                </div>
-
-                <p className='text-sm font-medium'>
-                  {receiverLocation?.lat}
-                </p>
-
-                <p className='text-sm font-medium mt-1'>
-                  {receiverLocation?.lng}
-                </p>
-
-              </div>
-
             </div>
 
-          )
+            <div className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-2xl p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <MapPin size={18} />
+                <h3 className="font-semibold">
+                  Sender Location
+                </h3>
+              </div>
 
-        }
+              <p className="text-sm">
+                Longitude: {data.longitude}
+              </p>
+
+              <p className="text-sm mt-1">
+                Latitude: {data.latitude}
+              </p>
+            </div>
+
+            <div className="bg-gradient-to-r from-blue-500 to-cyan-600 text-white rounded-2xl p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <MapPin size={18} />
+                <h3 className="font-semibold">
+                  Your Location
+                </h3>
+              </div>
+
+              <p className="text-sm">
+                Latitude: {receiverLocation?.lat}
+              </p>
+
+              <p className="text-sm mt-1">
+                Longitude: {receiverLocation?.lng}
+              </p>
+            </div>
+
+          </div>
+        )}
 
       </div>
 
-      <div className='rounded-2xl overflow-hidden shadow-lg bg-white'>
+      <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
 
-        {
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-4">
+          <h2 className="text-white text-xl font-semibold">
+            Live Tracking Map
+          </h2>
+          <p className="text-blue-100 text-sm">
+            Real-time sender and receiver locations
+          </p>
+        </div>
 
-          reveal && data.latitude && data.longitude && (
-
-            <LoadScript
-              googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API}
+        {reveal && data.latitude && data.longitude ? (
+          <LoadScript
+            googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API}
+          >
+            <GoogleMap
+              mapContainerStyle={{
+                width: "100%",
+                height: "650px"
+              }}
+              center={center}
+              zoom={18}
+              mapTypeId="hybrid"
             >
+              <Marker
+                position={center}
+                label="S"
+              />
 
-              <GoogleMap
-                mapContainerStyle={containerStyle}
-                 center={center}
-                zoom={18}
-                mapTypeId="hybrid"
-              >
-
+              {receiverLocation && (
                 <Marker
-                  position={center}
-                  label="S"
-      
+                  position={receiverLocation}
+                  label="R"
                 />
-
-                {
-
-                  receiverLocation && (
-
-                    <Marker
-                      position={receiverLocation}
-                      label="R"
-                      
-                    />
-
-                  )
-
-                }
-
-              </GoogleMap>
-
-            </LoadScript>
-
-          )
-
-        }
+              )}
+            </GoogleMap>
+          </LoadScript>
+        ) : (
+          <div className="h-[650px] flex items-center justify-center bg-slate-100">
+            <div className="text-center">
+              <MapPin
+                size={48}
+                className="mx-auto text-gray-400 mb-3"
+              />
+              <h3 className="text-lg font-semibold text-gray-600">
+                Waiting for Code
+              </h3>
+              <p className="text-gray-500">
+                Enter a valid sharing code to view the map
+              </p>
+            </div>
+          </div>
+        )}
 
       </div>
 
     </div>
-
-  )
+  </div>
+);
 
 }
 
