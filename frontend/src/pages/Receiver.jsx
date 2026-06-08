@@ -7,6 +7,7 @@ import {
   Send,
   CheckCircle2
 } from 'lucide-react';
+import { MdDownloading } from "react-icons/md";
 
 const Receiver = () => {
 
@@ -126,7 +127,7 @@ return (
 
         <div className="flex items-center gap-3 mb-6">
           <div className="bg-blue-600 p-3 rounded-full">
-            <Send size={28} color="white" />
+            <MdDownloading  size={28} color="white"/>
           </div>
 
           <div>
