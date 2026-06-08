@@ -88,6 +88,9 @@ app.delete('/delete/:code',async (req,res)=>{
      await Location.deleteOne({
         code:code
      });
+     await ReceiverData.deleteOne({
+        code:code
+     })
      res.send("Location deleted");
 })
 mongoose.connect(process.env.MONGO_URL)
