@@ -210,7 +210,7 @@ return (
             {wrong && <div className="bg-red-400 border border-green-200 rounded-2xl p-4">
               <div className="flex items-center gap-2 text-white">
                 <p className="font-semibold">
-                   Incorrect Code
+                   Invalid code or the sender is no longer sharing.
                 </p>
               </div>
             </div>
