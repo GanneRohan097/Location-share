@@ -70,7 +70,6 @@ const Sender = () => {
   //   const interval = setInterval(() => {
   //      handleReceiver();
   //   }, 5000);
-
   //   return ()=>clearInterval(interval);
   //  },[])
   const center = {
@@ -153,7 +152,7 @@ const Sender = () => {
             </button>
 
             <button
-              className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-medium transition-all duration-300"
+              className="flex-1 bg-black hover:bg-green-800 text-white py-3 rounded-xl font-medium transition-all duration-300"
               onClick={() => handleReceiver()}
             >
               Get Receiver Data

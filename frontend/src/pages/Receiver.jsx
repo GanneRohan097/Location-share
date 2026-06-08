@@ -17,8 +17,11 @@ const Receiver = () => {
 
   const [value, setValue] = useState(0)
   const [reveal, setReveal] = useState(false);
+   const [wrong, setWrong] = useState(false);
   const [data, setData] = useState({});
   const [receiverLocation, setReceiverLocation] = useState(null);
+  const [findLoading,setFindLoading] = useState(false);
+  const [sent,setSent] = useState(false);
 
   useEffect(() => {
 
@@ -68,10 +71,16 @@ const Receiver = () => {
         latitude : receiverLocation.lat
       }
     )
+    setSent(true);
+
+    setTimeout(() => {
+       setSent(false);
+    }, 5000);
     
   }
 
   async function handleRequest(enteredCode) {
+    setFindLoading(true);
     setInterval(() => {
 
       fetchLocation(enteredCode);
@@ -88,10 +97,18 @@ const Receiver = () => {
         code: enteredCode
       }
     );
-
+    if(response.data=="Incorrect"){
+      console.log("Wrong code");
+        setWrong(true);
+        setReveal(true);
+        setFindLoading(false);
+        return;
+    }
     setData(response.data);
-
+    console.log(response);
     setReveal(true);
+    setWrong(false);
+    setFindLoading(false);
     return response.data;
 
   }
@@ -139,32 +156,65 @@ return (
 
           <button
             onClick={() => handleRequest(value)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium transition flex items-center justify-center gap-2"
+            className="bg-blue-600  hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium transition flex items-center justify-center gap-2"
           >
             <Search size={18} />
             Find
+
+           {findLoading && <div className="w-8 h-8 rounded-full border-[3px] border-white  border-t-blue-800 border-b-blue-800 animate-spin"></div> }
+
           </button>
 
           <button
             onClick={() => sendData()}
-            className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-medium transition"
+              className="
+              px-6 py-3
+              text-base text-white
+              border-none
+              cursor-pointer
+              rounded-[15px]
+              text-center
+              bg-[length:800%_800%]
+              bg-[linear-gradient(90deg,#0f2027,#203a43,#5b727c,#0f2027)]
+              animate-gradient
+              transition-transform
+              duration-200
+              active:scale-95
+            "
           >
-            Send My Data
+            {!sent && <p>Send</p>}
+          {sent && 
+            <div className='flex items-center'>
+              <CheckCircle2 size={22} />
+              <p className='ml-1'>Sent</p>
+            </div>
+            }
+
           </button>
+          
 
         </div>
 
         {reveal && (
           <div className="space-y-4 mt-6">
 
-            <div className="bg-green-100 border border-green-200 rounded-2xl p-4">
+            {!wrong && <div className="bg-green-100 border border-green-200 rounded-2xl p-4">
               <div className="flex items-center gap-2 text-green-700">
                 <CheckCircle2 size={22} />
                 <p className="font-semibold">
                   Connection Established Successfully
                 </p>
               </div>
+            </div>}
+
+            {wrong && <div className="bg-red-400 border border-green-200 rounded-2xl p-4">
+              <div className="flex items-center gap-2 text-white">
+                <p className="font-semibold">
+                   Incorrect Code
+                </p>
+              </div>
             </div>
+            }
 
             <div className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-2xl p-5">
               <div className="flex items-center gap-2 mb-3">

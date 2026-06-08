@@ -42,7 +42,7 @@ app.post('/receive',async (req,res)=>{
             res.json(location)
         }
         else{
-            res.status(404).send("Incorrect code or location not found");
+            res.send("Incorrect");
         }
 
 })
