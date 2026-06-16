@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { use, useEffect } from 'react'
 import { useState } from 'react'
 import Receiver from './Receiver';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -24,8 +24,9 @@ const Sender = () => {
   const [code] = useState(Math.floor(100000 + Math.random() * 900000))
   const [reveal, setReveal] = useState(false);
   const [receiverLocation, setReceiverLocation] = useState({ lat: 77.58363, lng: 14.66940 });
-  const [copied , isCopied] = useState(false);
+  const [copied, isCopied] = useState(false);
   const [sharing, setSharing] = useState(false);
+  const [date, setDate] = useState([]);
   function handleGetCode() {
     setLoading(true);
     setReveal(true);
@@ -59,7 +60,9 @@ const Sender = () => {
       }
 
     )
-     setSharing(true);
+    setSharing(true);
+    const now = new Date()
+    setDate([now.getDate(), now.getMonth(), now.getFullYear(), now.getHours(), now.getMinutes(), now.getSeconds()])
   }
   async function handleReceiver() {
     const response = await axios.post(
@@ -113,24 +116,26 @@ const Sender = () => {
       .catch((err) => {
         console.log("Error");
       })
+    const now = new Date()
+    setDate([now.getDate(), now.getMonth(), now.getFullYear(), now.getHours(), now.getMinutes(), now.getSeconds()])
   }
   async function handleDelete() {
     await axios.delete(
       `https://location-share-f1m3.onrender.com/delete/${data[0]}`
     );
     console.log("Deleted")
-    setData([0,0,0]);
+    setData([0, 0, 0]);
     setReveal(false);
-     setSharing(false);
+    setSharing(false);
 
   }
 
   async function handleCopy() {
-     await navigator.clipboard.writeText(data[0]);
-     isCopied(true);
-     setTimeout(() => {
-        isCopied(false);
-     }, 5000);
+    await navigator.clipboard.writeText(data[0]);
+    isCopied(true);
+    setTimeout(() => {
+      isCopied(false);
+    }, 5000);
   }
   const today = new Date()
   return (
@@ -142,33 +147,33 @@ const Sender = () => {
             <div className="bg-blue-600 p-3 rounded-full">
               <Send size={28} color="white" />
             </div>
-             <div className='flex items-center justify-between w-full'>
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-900">
-                    Share Your Location
-                  </h1>
-                  <p className="text-gray-500 text-sm">
-                    Generate a code and share your live location
-                  </p>
-                </div>
+            <div className='flex items-center justify-between w-full'>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  Share Your Location
+                </h1>
+                <p className="text-gray-500 text-sm">
+                  Generate a code and share your live location
+                </p>
+              </div>
 
-                {sharing && 
+              {sharing &&
                 <div className='flex items-center bg-green-200 p-1 pl-2 pr-2 rounded-3xl '>
-                    <div className='bg-green-600 h-3 w-3 rounded-full'></div>
-                    <div className='relative right-3 bg-green-400 h-3 w-3 rounded-full animate-ping'></div>
-                    <p>Sharing active</p>
+                  <div className='bg-green-600 h-3 w-3 rounded-full'></div>
+                  <div className='relative right-3 bg-green-400 h-3 w-3 rounded-full animate-ping'></div>
+                  <p>Sharing active</p>
                 </div>
-                }
-                {!sharing && 
+              }
+              {!sharing &&
                 <div className='flex items-center bg-gray-200 p-1 pl-2 pr-2 rounded-3xl '>
-                    <div className='bg-gray-600 h-3 w-3 rounded-full'></div>
-                    <div className='relative right-3 bg-gray-400 h-3 w-3 rounded-full'></div>
-                    <p className='text-gray-400'>Sharing Inactive</p>
+                  <div className='bg-gray-600 h-3 w-3 rounded-full'></div>
+                  <div className='relative right-3 bg-gray-400 h-3 w-3 rounded-full'></div>
+                  <p className='text-gray-400'>Sharing Inactive</p>
                 </div>
-                }
-             </div>
+              }
+            </div>
 
-            
+
           </div>
 
           <p className="text-gray-600 bg-slate-100 p-4 rounded-xl mb-6">
@@ -181,7 +186,7 @@ const Sender = () => {
               className="flex-1 items-center bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition-all duration-300"
               onClick={() => handleGetCode()}
             >
-             
+
               Get Current Location
             </button>
 
@@ -205,8 +210,8 @@ const Sender = () => {
               <h1 className="text-5xl font-bold tracking-widest mt-2">
                 {data[0]}
               </h1>
-              <button onClick={()=>handleCopy()}>
-                {copied? <CheckCircle/>: <Copy/>}
+              <button onClick={() => handleCopy()}>
+                {copied ? <CheckCircle /> : <Copy />}
               </button>
             </div>
 
@@ -224,13 +229,13 @@ const Sender = () => {
               {data[1]}, {data[2]}
             </p>
           </div>
-           <div className='flex items-center border w-fit pr-2 mb-3 rounded'>
-              <Clock3 className='text-blue-700 ml-2 bg-blue-100 h-8 w-8 p-1 rounded-md'/>
-              <div className='ml-4'>
-                <p className=''>Last Updated</p>
-                <p className='font-bold text-lg'>03:34 PM</p>
-              </div>
-           </div>
+          <div className='flex items-center border w-fit pr-2 mb-3 rounded'>
+            <Clock3 className='text-blue-700 ml-2 bg-blue-100 h-8 w-8 p-1 rounded-md' />
+            <div className='ml-4'>
+              <p className=''>Last Updated</p>
+              <p className='font-bold text-lg'>{date[0]}/{date[1]}/{date[2]}  {date[3]}:{date[4]}:{date[5]}</p>
+            </div>
+          </div>
           <button
             className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-medium transition-all duration-300"
             onClick={() => handleDelete()}
