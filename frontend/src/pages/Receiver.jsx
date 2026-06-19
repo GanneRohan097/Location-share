@@ -6,7 +6,8 @@ import {
   Search,
   Send,
   CheckCircle2,
-  Clock3
+  Clock3,
+  UserRound,Info
 } from 'lucide-react';
 import { MdDownloading } from "react-icons/md";
 
@@ -24,6 +25,7 @@ const Receiver = () => {
   const [receiverLocation, setReceiverLocation] = useState(null);
   const [findLoading, setFindLoading] = useState(false);
   const [sent, setSent] = useState(false);
+  const [receiverName, setReceiverName] = useState("R");
 
   useEffect(() => {
 
@@ -68,7 +70,7 @@ const Receiver = () => {
     await axios.post(
       'https://location-share-f1m3.onrender.com/receiverShare', {
       code: value,
-      name: "Rohan",
+      name: receiverName,
       longitude: receiverLocation.lng,
       latitude: receiverLocation.lat
     }
@@ -146,6 +148,15 @@ const Receiver = () => {
               Enter the code shared by the sender and start live tracking.
             </p>
           </div>
+          <div className='mb-4'>
+            <div className='flex  ml-1 mb-2'>
+              <UserRound size={25} className='text-blue-800' />
+              <p className='font-semibold'>Your Name</p>(Optional)
+            </div>
+
+            <input onChange={(e)=> setReceiverName(e.target.value)}  className="flex-1 border-2 w-full border-gray-200 rounded-xl px-4 py-3 text-lg outline-none focus:border-blue-500 transition" type='text' placeholder='Enter your name'></input>
+            <p className='m-0 text-gray-600'>This name will visible to the sender</p>
+          </div>
 
           <div className="flex flex-col md:flex-row gap-3">
 
@@ -161,9 +172,9 @@ const Receiver = () => {
               className="bg-blue-600  hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium transition flex items-center justify-center gap-2"
             >
               <Search size={18} />
-              Find
+              Connect
 
-              {findLoading && <div className="w-8 h-8 rounded-full border-[3px] border-white  border-t-blue-800 border-b-blue-800 animate-spin"></div>}
+              {findLoading && (<div className='flex items-center ml-[-7px]'>ing<div className="w-8 h-8 rounded-full border-[3px] border-white  border-t-blue-800 border-b-blue-800 animate-spin"></div></div>)}
 
             </button>
 
@@ -195,6 +206,13 @@ const Receiver = () => {
             </button>
 
 
+          </div>
+          <div className='flex items-center mt-6 bg-blue-100 rounded-md p-1 border border-l-blue-500 border-l-4'>
+             <Info className='text-blue-800' />
+             <div className='ml-3'>
+               <h1 className='text-lg text-blue-900 font-semibold'>Why should enter your name?</h1>
+               <p className='text-gray-600'>The sender will see who is accessing this location</p>
+             </div>
           </div>
           <div className='flex items-center border w-fit pr-2 rounded mt-4'>
             <Clock3 className='text-blue-700 ml-2 bg-blue-100 h-8 w-8 p-1 rounded-md' />
@@ -283,7 +301,7 @@ const Receiver = () => {
               <GoogleMap
                 mapContainerStyle={{
                   width: "100%",
-                  height: "650px"
+                  height: "90%"
                 }}
                 center={center}
                 zoom={18}
