@@ -51,7 +51,7 @@ app.post('/receiverShare', async(req,res)=>{
     const {code , name , longitude , latitude} = req.body;
     console.log("Body:",req.body);
     let receiver = await ReceiverData.findOne({
-        code: code
+        code,name,longitude,latitude
     })
     if(receiver){
         receiver.name=name;
@@ -74,7 +74,7 @@ app.post('/receiverShare', async(req,res)=>{
 
 app.post('/sendReceiver',async(req,res)=>{
       const {code} = req.body;
-      const receiver = await ReceiverData.findOne({
+      const receiver = await ReceiverData.find({
         code: code
       });
       if(receiver){
@@ -88,7 +88,7 @@ app.delete('/delete/:code',async (req,res)=>{
      await Location.deleteOne({
         code:code
      });
-     await ReceiverData.deleteOne({
+     await ReceiverData.deleteMany({
         code:code
      })
      res.send("Location deleted");

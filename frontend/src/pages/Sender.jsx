@@ -71,6 +71,7 @@ const Sender = () => {
     }
     )
     setReceiverLocation(response.data);
+    console.log(response.data);
     console.log(receiverLocation);
   }
 
