@@ -14,6 +14,8 @@ import {
   CheckCircle,
   Clock3,
   LocateFixed,
+  Users,
+  RefreshCcw
 } from 'lucide-react';
 
 const Sender = () => {
@@ -23,10 +25,11 @@ const Sender = () => {
   const [loading, setLoading] = useState(false);
   const [code] = useState(Math.floor(100000 + Math.random() * 900000))
   const [reveal, setReveal] = useState(false);
-  const [receiverLocation, setReceiverLocation] = useState({ lat: 77.58363, lng: 14.66940 });
+  const [receiverLocation, setReceiverLocation] = useState([]);
   const [copied, isCopied] = useState(false);
   const [sharing, setSharing] = useState(false);
   const [date, setDate] = useState([]);
+  const [spin,setSpin] = useState(false);
   function handleGetCode() {
     setLoading(true);
     setReveal(true);
@@ -41,8 +44,6 @@ const Sender = () => {
         ];
         setData(newData);
         setLoading(false);
-        localStorage.setItem("sharedData", JSON.stringify(newData));
-        console.log("Stored locally");
         axios.post(
           'https://location-share-f1m3.onrender.com/share',
           {
@@ -65,6 +66,7 @@ const Sender = () => {
     setDate([now.getDate(), now.getMonth(), now.getFullYear(), now.getHours(), now.getMinutes(), now.getSeconds()])
   }
   async function handleReceiver() {
+    setSpin(true);
     const response = await axios.post(
       'https://location-share-f1m3.onrender.com/sendReceiver', {
       code: code
@@ -73,6 +75,7 @@ const Sender = () => {
     setReceiverLocation(response.data);
     console.log(response.data);
     console.log(receiverLocation);
+    setSpin(false);
   }
 
   //  useEffect(()=>{
@@ -102,7 +105,6 @@ const Sender = () => {
       latitude
     ];
     setData(newData);
-    localStorage.setItem("sharedData", JSON.stringify(newData));
     axios.post(
       'https://location-share-f1m3.onrender.com/share',
       {
@@ -128,6 +130,7 @@ const Sender = () => {
     setData([0, 0, 0]);
     setReveal(false);
     setSharing(false);
+    setReceiverLocation([]);
 
   }
 
@@ -237,6 +240,20 @@ const Sender = () => {
               <p className='font-bold text-lg'>{date[0]}/{date[1]}/{date[2]}  {date[3]}:{date[4]}:{date[5]}</p>
             </div>
           </div>
+          <div className='border-2 p-2 mb-2'>
+            <div className='flex justify-between'>
+              <Users className='bg-blue-600 p-1 rounded-lg  text-white' size={30} />
+              <h1 className='text-2xl font-bold'>Active Receivers ({receiverLocation.length})</h1>
+              <RefreshCcw onClick={() => handleReceiver()} className={`text-blue-800 ${spin? `animate-spin`: `animate-none`}   `} size={27} />
+            </div>
+            {receiverLocation.map((receiver, index) => (
+              <div className='flex items-center mt-4 py-2 rounded-md   bg-green-50'>
+                <MapPin className='text-red-800' />
+                <h1 className='font-semibold text-xl'>{receiver.name}</h1>
+              </div>
+            ))}
+
+          </div>
           <button
             className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-medium transition-all duration-300"
             onClick={() => handleDelete()}
@@ -282,10 +299,17 @@ const Sender = () => {
                   }}
                 />
 
-                <Marker
-                  position={rData}
-                  label={receiverLocation.name}
-                />
+
+                {receiverLocation.map((receiver, index) => (
+                  <Marker
+                    key={index}
+                    position={{
+                      lat: receiver.latitude,
+                      lng: receiver.longitude
+                    }}
+                    label={receiver.name[0]}
+                  />
+                ))}
               </GoogleMap>
             )}
           </LoadScript>
