@@ -29,7 +29,10 @@ const Sender = () => {
   const [copied, isCopied] = useState(false);
   const [sharing, setSharing] = useState(false);
   const [date, setDate] = useState([]);
-  const [spin,setSpin] = useState(false);
+  const [spin, setSpin] = useState(false);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
+  const [autoClick, setAutoClick] = useState(false);
   function handleGetCode() {
     setLoading(true);
     setReveal(true);
@@ -141,6 +144,36 @@ const Sender = () => {
       isCopied(false);
     }, 5000);
   }
+
+  useEffect(() => {
+    const intervalid = setInterval(() => {
+      if (minutes === 0 && seconds === 0) {
+        clearInterval(intervalid);
+        return;
+      }
+      if (seconds === 0) {
+        setMinutes(prev => prev - 1);
+        setSeconds(59)
+
+      }
+      else {
+        setSeconds(prev => prev - 1)
+      }
+
+    }, 1000);
+    return () => clearInterval(intervalid)
+  }, [minutes, seconds]);
+
+  useEffect(() => {
+    if (minutes === 0 && seconds === 0) {
+      handleDelete();
+      setAutoClick(true);
+      setTimeout(() => {
+        setAutoClick(false);
+      }, 1000);
+    }
+  }, [minutes, seconds]);
+
   const today = new Date()
   return (
     <div className="min-h-screen  p-6">
@@ -220,7 +253,61 @@ const Sender = () => {
             </div>
 
           </div>
+          <div className="bg-white border rounded-2xl p-5 shadow-sm mb-4">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-gray-800">
+                Set Timer(Auto stop)
+              </h2>
 
+              <div className="bg-blue-50 px-4 py-2 rounded-xl">
+                <p className="text-3xl font-bold text-blue-700">
+                  {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3 mb-4">
+              <button
+                onClick={() => {
+                  setMinutes(10);
+                  setSeconds(0);
+                }}
+                className="bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105"
+              >
+                10:00
+              </button>
+
+              <button
+                onClick={() => {
+                  setMinutes(5);
+                  setSeconds(0);
+                }}
+                className="bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105"
+              >
+                05:00
+              </button>
+
+              <button
+                onClick={() => {
+                  setMinutes(3);
+                  setSeconds(0);
+                }}
+                className="bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105"
+              >
+                03:00
+              </button>
+            </div>
+
+            <button
+              onClick={() => {
+                setMinutes(0);
+                setSeconds(0);
+              }}
+              className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-[0.98]"
+            >
+              Cancel Timer
+            </button>
+          </div>
           <div className="bg-slate-100 rounded-2xl p-5 mb-6">
             <div className="flex items-center gap-2 mb-3">
               <MapPin size={20} className="text-red-500" />
@@ -244,7 +331,7 @@ const Sender = () => {
             <div className='flex justify-between'>
               <Users className='bg-blue-600 p-1 rounded-lg  text-white' size={30} />
               <h1 className='text-2xl font-bold'>Active Receivers ({receiverLocation.length})</h1>
-              <RefreshCcw onClick={() => handleReceiver()} className={`text-blue-800 ${spin? `animate-spin`: `animate-none`}   `} size={27} />
+              <RefreshCcw onClick={() => handleReceiver()} className={`text-blue-800 ${spin ? `animate-spin` : `animate-none`}   `} size={27} />
             </div>
             {receiverLocation.map((receiver, index) => (
               <div className='flex items-center mt-4 py-2 rounded-md   bg-green-50'>
@@ -255,7 +342,7 @@ const Sender = () => {
 
           </div>
           <button
-            className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-medium transition-all duration-300"
+            className={`w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-medium scale-${(autoClick) ? 90 : ""} transition-all duration-300`}
             onClick={() => handleDelete()}
           >
             Stop Sharing
@@ -277,7 +364,7 @@ const Sender = () => {
               <GoogleMap
                 mapContainerStyle={{
                   width: '100%',
-                  height: '650px'
+                  height: '800px'
                 }}
                 center={center}
                 zoom={18}

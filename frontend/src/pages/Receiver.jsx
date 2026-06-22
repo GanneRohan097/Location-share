@@ -301,7 +301,7 @@ const Receiver = () => {
               <GoogleMap
                 mapContainerStyle={{
                   width: "100%",
-                  height: "90%"
+                  height: "800px"
                 }}
                 center={center}
                 zoom={18}
