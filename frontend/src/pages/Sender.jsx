@@ -160,7 +160,7 @@ const Sender = () => {
         setSeconds(prev => prev - 1)
       }
 
-    }, 10);
+    }, 1000);
     return () => clearInterval(intervalid)
   }, [minutes, seconds]);
 
