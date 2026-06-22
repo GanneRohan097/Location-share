@@ -160,7 +160,7 @@ const Sender = () => {
         setSeconds(prev => prev - 1)
       }
 
-    }, 1000);
+    }, 10);
     return () => clearInterval(intervalid)
   }, [minutes, seconds]);
 
@@ -342,7 +342,7 @@ const Sender = () => {
 
           </div>
           <button
-            className={`w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-medium scale-${(autoClick) ? 90 : ""} transition-all duration-300`}
+            className={`w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-medium ${autoClick? "scale-90 opacity-70":"scale-100 opacity-100"} transition-all duration-300`}
             onClick={() => handleDelete()}
           >
             Stop Sharing
