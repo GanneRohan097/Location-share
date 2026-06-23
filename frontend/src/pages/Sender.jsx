@@ -272,7 +272,7 @@ const Sender = () => {
                   setMinutes(10);
                   setSeconds(0);
                 }}
-                className="bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105"
+                className="bg-blue-50 hover:bg-blue-100 border-2 border-gray-300 text-black py-3 rounded font-medium transition-all duration-300 "
               >
                 10:00
               </button>
@@ -282,7 +282,7 @@ const Sender = () => {
                   setMinutes(5);
                   setSeconds(0);
                 }}
-                className="bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105"
+                className="bg-blue-50 hover:bg-blue-100 border-2 border-gray-300 text-black py-3 rounded font-medium transition-all duration-300 "
               >
                 05:00
               </button>
@@ -292,7 +292,7 @@ const Sender = () => {
                   setMinutes(3);
                   setSeconds(0);
                 }}
-                className="bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105"
+                className="bg-blue-50 hover:bg-blue-100 border-2 border-gray-300 text-black py-3 rounded font-medium transition-all duration-300 "
               >
                 03:00
               </button>
